@@ -1,0 +1,87 @@
+app {
+    animation: drb-fade 2s ease-in-out;
+}
+@keyframes drb-fade {
+    0% {
+        opacity: 0;
+        -webkit-filter: blur(10px);
+    }
+    70% {
+        -webkit-filter: blur(0px);
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.guild-channels header {
+    opacity: 1;
+}
+.guild-channels .channel-voice .channel-arrow {
+    transition: opacity .3s, margin .3s;
+    opacity: 0;
+     margin-right: -16px;
+}
+.guild-channels .channel-voice:hover .channel-arrow {
+    opacity: 1;
+    margin-right: 8px;
+}
+
+#user-profile-modal .header .discord-tag .discriminator{
+        transition: opacity .3s, margin .3s;
+    opacity: 0;
+}
+#user-profile-modal .header .discord-tag:hover .discriminator{
+        opacity: 1;
+    margin-right: 0px;
+}
+
+.ink {
+    display: block; position: absolute;
+    background: #fff;
+    border-radius: 100%;
+    transform: scale(0);
+    z-index: 100;
+    pointer-events: none;
+}
+/*animation effect*/
+.ink.animate {animation: ripple 1300ms cubic-bezier(.32,0,0,1);}
+@keyframes ripple {
+    /*scale the element to 250% to safely cover the entire link and fade it out*/
+    100% {opacity: 0; transform: scale(2.5);}
+}
+ .guild-channels .channel, .guilds-wrapper .guilds .guild, .private-channels .channel, .user-settings-modal .tab-bar.SIDE .tab-bar-item, .theme-dark .channel-members .member{
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+</style>
+<script>
+var ink, d, x, y;
+$('body').on('mousedown','.guilds-wrapper .guilds .guild, .guild-channels .channel, .private-channels .channel, .user-settings-modal .tab-bar.SIDE .tab-bar-item, .theme-dark .channel-members .member', function(e){
+
+    //create .ink element if it doesn't exist
+    if($(this).find(".ink").length == 0)
+        $(this).prepend("<span class='ink'></span>");
+
+    ink = $(this).find(".ink");
+    //incase of quick double clicks stop the previous animation
+    ink.removeClass("animate");
+
+    //set size of .ink
+    if(!ink.height() && !ink.width())
+    {
+        //use $(this)'s width or height whichever is larger for the diameter to make a circle which can cover the entire element.
+        d = Math.max($(this).outerWidth(), $(this).outerHeight());
+        ink.css({height: d, width: d});
+    }
+
+    //get click coordinates
+    //logic = click coordinates relative to page - $(this)'s position relative to page - half of self height/width to make it controllable from the center;
+    x = e.pageX - $(this).offset().left - ink.width()/2;
+    y = e.pageY - $(this).offset().top - ink.height()/2;
+
+    //set the position and add class .animate
+    ink.css({top: y+'px', left: x+'px'}).addClass("animate");
+});
+</script>
